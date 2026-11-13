@@ -4,29 +4,45 @@ Improve [.agents/skills/as-prose/SKILL.md](.agents/skills/as-prose/SKILL.md)
 through small experiments and human review. Use this workflow for skill
 iterations; setup and fixture maintenance do not start an experiment.
 
+## Context boundaries
+
+- **Skill editor:** use only the current goal, human feedback, accepted learning
+  history, and skill files. Do not inspect project implementations, generated
+  source diffs, or internal reviewer feedback and scores. Use file lists and
+  runner status for commits and PR bookkeeping.
+- **Isolated runner:** read the implementations and own the skill's application,
+  implementation, review, and verification process. Internal reviewer feedback
+  stays here. Return only completion status, changed paths, check pass/fail, and
+  operational blockers, without source excerpts or review findings.
+- Only skill-file edits may steer the result. Do not give the runner the
+  editor's conversation, goal, human feedback, learning record, or desired output.
+
 ## Starting point
 
-- **Existing PR:** read its description and human feedback, including inline
-  comments and reviews. Continue on that branch to address the feedback. If a
-  human has already commented `clean`, follow acceptance below instead.
+- **Existing PR:** read its stated goal and human feedback, including inline
+  comment text and human reviews, without loading source diffs. Continue on that
+  branch to address the feedback. If a human has already commented `clean`,
+  follow acceptance below instead.
 - **No existing PR:** use the problem described by the human and start a
   `feat/as-prose-<improvement>` branch from `main`.
 
 ## Iteration
 
-1. **Understand the problem.** Read the skill, reviewer brief, and
+1. **Understand the problem.** Read the skill and
    [accepted learnings](learnings.md). Use the current PR's human feedback or
    the human-described problem as the goal.
 2. **Update the skill first.** Keep guidance reusable rather than tailored to
    benchmark examples. Validate metadata, links, and changed scripts; use the
    skill-creator validator when available.
-3. **Apply it in place.** Run the updated skill on all four projects in
-   `projects/`. Follow its independent reviewer and implementation roles, using
-   fresh contexts without coaching expected comments or scores. If results
-   reveal a skill weakness, revise the guidance and rerun; apply the final skill
-   version across all four projects.
-4. **Verify.** Judge the change against the current goal, human feedback, and
-   accepted learnings from history. Report evidence and gaps; do not invent
+3. **Run in isolation.** Start a fresh runner with `fork_turns: "none"` or an
+   equivalent clean context. Use the same neutral request each time: "As the
+   isolated runner, apply the repository's as-prose skill to all four projects
+   in `projects/`, in place."
+   The runner follows [runner-checks.md](runner-checks.md). For another trial,
+   edit the skill and start another fresh runner; do not coach the run directly.
+4. **Verify the guidance.** Check the skill edit against the current goal, human
+   feedback, and accepted learning history. Use the runner's check status for
+   readiness; human review judges the generated project output. Do not invent
    additional acceptance criteria.
 5. **Commit and push.** Use conventional, atomic commits on the chosen branch.
    Commit skill changes and resulting project edits separately in the same PR;
@@ -65,18 +81,5 @@ iterations; setup and fixture maintenance do not start an experiment.
   results outside it or mix in unrelated cleanup and bug fixes.
 - Preserve unrelated work and keep `SOURCES.json`, `NOTICE`, and `LICENSE` intact.
 - Do not weaken checks to hide failures, force-push, or merge the PR.
-- Keep build artifacts and test data in disposable locations. Compare behavior
-  with the branch's starting point and report failed or skipped checks.
-
-## Project checks
-
-- **TCP socket:** compile all classes; check echo and client exit. If port 5000
-  is occupied, substitute a free port in a disposable copy and report it;
-  leave tracked ports unchanged.
-- **Password generator:** check character sets, length range, and no-options
-  behavior; exercise Tkinter when available and distinguish GUI from core checks.
-- **Make text uppercase:** check JavaScript syntax, served HTML/assets, and
-  uppercase conversion. Use a browser when available; report HTTP-only or
-  handler-only checks.
-- **Huffman compressor:** compile C++ and verify a complete codebook generation,
-  encoding, and decoding round trip with supported input.
+- Project-specific verification belongs to the isolated runner. The skill editor
+  does not load `runner-checks.md` or detailed execution and review logs.
