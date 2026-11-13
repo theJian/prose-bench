@@ -4,11 +4,19 @@ Improve [.agents/skills/as-prose/SKILL.md](.agents/skills/as-prose/SKILL.md)
 through small experiments and human review. Use this workflow for skill
 iterations; setup and fixture maintenance do not start an experiment.
 
+## Starting point
+
+- **Existing PR:** read its description and human feedback, including inline
+  comments and reviews. Continue on that branch to address the feedback. If a
+  human has already commented `clean`, follow acceptance below instead.
+- **No existing PR:** use the problem described by the human and start a
+  `feat/as-prose-<improvement>` branch from `main`.
+
 ## Iteration
 
-1. **Choose a problem.** Read the skill, reviewer brief,
-   [accepted learnings](learnings.md), and
-   previous PR feedback. Identify a concrete reader problem to improve.
+1. **Understand the problem.** Read the skill, reviewer brief, and
+   [accepted learnings](learnings.md). Use the current PR's human feedback or
+   the human-described problem as the goal.
 2. **Update the skill first.** Keep guidance reusable rather than tailored to
    benchmark examples. Validate metadata, links, and changed scripts; use the
    skill-creator validator when available.
@@ -21,10 +29,10 @@ iterations; setup and fixture maintenance do not start an experiment.
    check executable syntax or compiled output is unchanged, accounting for
    Python docstrings. Explain and test structural changes separately. Recheck
    accepted learnings' regression criteria and report the outcomes in the PR.
-5. **Commit and push.** Use a `feat/as-prose-<improvement>` branch and conventional,
-   atomic commits. Commit skill changes and resulting project edits separately
-   in the same PR; push as work progresses.
-6. **Request human review.** Open a PR with the problem, skill change, direct
+5. **Commit and push.** Use conventional, atomic commits on the chosen branch.
+   Commit skill changes and resulting project edits separately in the same PR;
+   push as work progresses.
+6. **Request human review.** Open or update the PR with the problem, skill change, direct
    `projects/` diffs, checks, limitations, and links to relevant feedback. Ask
    for human feedback and an explicit `clean` comment when satisfied. Return
    the PR URL and wait; report publishing blockers honestly.
