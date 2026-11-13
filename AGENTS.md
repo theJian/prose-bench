@@ -7,7 +7,7 @@ iterations; setup and fixture maintenance do not start an experiment.
 ## Iteration
 
 1. **Choose a problem.** Read the skill, reviewer brief,
-   [accepted learnings](.agents/skills/as-prose/references/learnings.md), and
+   [accepted learnings](learnings.md), and
    previous PR feedback. Identify a concrete reader problem to improve.
 2. **Update the skill first.** Keep guidance reusable rather than tailored to
    benchmark examples. Validate metadata, links, and changed scripts; use the
@@ -38,14 +38,15 @@ iterations; setup and fixture maintenance do not start an experiment.
   approvals, and agent scores do not substitute for it. Later changes to the
   skill or project outputs require another human `clean`.
 - Record lessons from accepted human feedback in
-  [learnings.md](.agents/skills/as-prose/references/learnings.md), with evidence
-  and a concrete regression check. Keep unaccepted feedback in its PR.
+  [learnings.md](learnings.md), with evidence and a concrete regression check.
+  This is the iteration agent's tracking record, outside the skill package.
+  Keep unaccepted feedback in its PR.
 - **Never merge the PR.** On a clean `main` checkout, cherry-pick only commits
   whose entire diff is within `.agents/skills/as-prose/`. For mixed commits,
-  apply only the reviewed skill changes in a separate commit. Include accepted
-  learnings, leave `projects/` changes on the PR branch, and verify the promotion
-  diff contains only skill paths before pushing. Link the promotion commit to
-  the PR and leave the PR unmerged.
+  apply only the reviewed skill changes in a separate commit. Leave `projects/`
+  changes on the PR branch and verify the promotion diff contains only skill
+  paths before pushing. Update root `learnings.md` in a separate tracking commit.
+  Link the promotion commit to the PR and leave the PR unmerged.
 
 ## Constraints
 
