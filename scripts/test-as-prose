@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Apply as-prose in a fresh Codex session and return the trial's result."""
+
+import argparse
+import difflib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+
+
+def snapshot(root):
+    """Capture non-ignored working files for trial diffs and scope checks."""
+    paths = subprocess.check_output(
+        ['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'],
+        cwd=root,
+    ).split(b'\0')
+    return {
+        os.fsdecode(path): (root / os.fsdecode(path)).read_bytes()
+        for path in set(paths)
+        if path and (root / os.fsdecode(path)).is_file()
+    }
+
+
+def in_scope(path, targets):
+    return any(path == target or path.startswith(target + '/') for target in targets)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('targets', nargs='*', help='Paths under projects/; defaults to projects/')
+    args = parser.parse_args()
+    if os.environ.get('PROSE_BENCH_RUNNER'):
+        parser.error('a test runner must not launch another test session')
+
+    root = Path(__file__).resolve().parent.parent
+    projects = (root / 'projects').resolve()
+    targets = []
+    for name in args.targets or ['projects']:
+        path = (root / name).resolve()
+        if not path.exists() or not path.is_relative_to(projects):
+            parser.error('targets must be existing paths under projects/')
+        targets.append(path.relative_to(root).as_posix())
+    codex = shutil.which('codex')
+    if codex is None:
+        parser.error('codex is not on PATH')
+
+    run_dir = Path(tempfile.mkdtemp(prefix='prose-bench-run-'))
+    message = run_dir / 'result.md'
+    patch_file = run_dir / 'changes.patch'
+    before = snapshot(root)
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root)
+    prompt = (
+        'You are the isolated as-prose test runner, not the skill editor.\n'
+        'Use .agents/skills/as-prose/SKILL.md on these paths, in place:\n'
+        + json.dumps(targets) + '\n'
+        'Follow runner-checks.md. Do not edit skill files, start the editor loop, '
+        'commit, push, or change PRs. Do not read learnings.md or human PR feedback.\n'
+        'Return the generated result and verification summary for the editor to '
+        'evaluate. Keep internal reviewer conversations and logs in this session.\n'
+    )
+    env = dict(os.environ, PROSE_BENCH_RUNNER='1')
+    command = [
+        codex, 'exec', '--ephemeral', '--sandbox', 'workspace-write',
+        '--cd', str(root), '--json', '--output-last-message', str(message), '-',
+    ]
+    with (run_dir / 'events.jsonl').open('wb') as events, (run_dir / 'stderr.log').open('wb') as errors:
+        result = subprocess.run(
+            command, input=prompt, text=True, cwd=root, env=env,
+            stdout=events, stderr=errors,
+        )
+
+    after = snapshot(root)
+    changed = sorted(path for path in before.keys() | after.keys() if before.get(path) != after.get(path))
+    outside = [path for path in changed if not in_scope(path, targets)]
+    patch = []
+    for path in changed:
+        if in_scope(path, targets):
+            patch.extend(difflib.unified_diff(
+                before.get(path, b'').decode('utf-8', errors='replace').splitlines(True),
+                after.get(path, b'').decode('utf-8', errors='replace').splitlines(True),
+                fromfile='a/' + path, tofile='b/' + path, n=0,
+            ))
+    patch_file.write_text(''.join(patch))
+    head_changed = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root) != head
+    completed = result.returncode == 0 and message.exists() and not outside and not head_changed
+    report = {
+        'status': 'completed' if completed else 'failed',
+        'exit_code': result.returncode,
+        'output': message.read_text() if message.exists() else '',
+        'changed_paths': changed,
+        'changes_patch': str(patch_file),
+        'run_directory': str(run_dir),
+        'out_of_scope_changes': outside,
+        'head_changed': head_changed,
+    }
+    (run_dir / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
+    print(json.dumps(report, indent=2))
+    return 0 if completed else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

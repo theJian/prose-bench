@@ -1,11 +1,17 @@
 # Isolated runner checks
 
-This file is for the isolated runner, not the skill editor. Apply the current
-repository skill in place and follow its internal implementation/reviewer
-workflow. Keep implementation details, reviewer feedback, and scores inside
-this run. Do not read the editor's human feedback or `learnings.md`.
+This file is for a fresh test session, not the persistent skill editor. Apply
+the current repository skill to the requested paths in place and follow its
+internal implementation/reviewer workflow. Do not edit the skill, call the test
+helper recursively, commit, push, or manage PRs. Do not read the editor's human
+feedback or `learnings.md`.
 
 ## Project checks
+
+Run checks relevant to the requested targets. The final all-project trial must
+cover all four projects. Preserve behavior and public interfaces; for prose
+edits, check executable syntax or compiled output is unchanged, accounting for
+Python docstrings. Explain and validate structural changes separately.
 
 - **TCP socket:** compile all classes; check echo and client exit. If port 5000
   is occupied, substitute a free port in a disposable copy and report it;
@@ -21,6 +27,8 @@ this run. Do not read the editor's human feedback or `learnings.md`.
 Keep build artifacts and test data in disposable locations. Compare behavior
 with the branch's starting point and report failed or skipped checks.
 
-Return only completion status, changed paths, check pass/fail (including skipped
-checks), and operational blockers. Do not return source excerpts, detailed
-execution logs, reviewer findings, or suggestions for changing the skill.
+Return a concise description of the generated explanations, changed paths,
+verification outcomes, limitations, and operational blockers. The editor will
+evaluate the result against its goal; do not decide that goal is satisfied.
+Keep internal reviewer conversations and scores out of the final response.
+The helper captures the actual source diff separately for the editor to inspect.
