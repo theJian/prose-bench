@@ -4,6 +4,8 @@ Repository tracking record for the iteration agent's decisions about skill
 updates. This file is not part of the `as-prose` skill.
 
 Add a lesson only after a human explicitly comments `clean` on the relevant PR.
+That comment authorizes the agent to update this record and the skill directly
+on `main`, then commit and push, without changing the original PR or branch.
 Capture what the accepted feedback demonstrates; do not invent lessons from
 agent scores or treat every example as a universal rule.
 

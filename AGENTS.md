@@ -28,25 +28,26 @@ iterations; setup and fixture maintenance do not start an experiment.
    `projects/` diffs, checks, limitations, and links to relevant feedback. Ask
    for human feedback and an explicit `clean` comment when satisfied. Return
    the PR URL and wait; report publishing blockers honestly.
-7. **Incorporate feedback.** Revise the skill before rerunning it and update the
-   same PR. After acceptance, record the learning and promote only skill changes
-   as described below. Start the next experiment from the updated `main`.
+7. **Incorporate feedback.** Before `clean`, revise the skill, rerun it, and
+   update the same PR. After `clean`, update skills and learnings directly on
+   `main` as described below. Start new experiments from the updated `main`.
 
 ## Acceptance and learning
 
-- A human's explicit `clean` comment accepts the reviewed revision. Bot comments,
-  approvals, and agent scores do not substitute for it. Later changes to the
-  skill or project outputs require another human `clean`.
+- A human's explicit `clean` comment accepts the reviewed revision and authorizes
+  the agent to update skills and root `learnings.md` directly on `main`.
+  Bot comments, approvals, and agent scores do not substitute for it.
 - Record lessons from accepted human feedback in
   [learnings.md](learnings.md), with evidence and a concrete regression check.
   This is the iteration agent's tracking record, outside the skill package.
   Keep unaccepted feedback in its PR.
-- **Never merge the PR.** On a clean `main` checkout, cherry-pick only commits
-  whose entire diff is within `.agents/skills/as-prose/`. For mixed commits,
-  apply only the reviewed skill changes in a separate commit. Leave `projects/`
-  changes on the PR branch and verify the promotion diff contains only skill
-  paths before pushing. Update root `learnings.md` in a separate tracking commit.
-  Link the promotion commit to the PR and leave the PR unmerged.
+- After `clean`, carry forward the accepted skill changes and incorporate the
+  accepted feedback on `main`. Validate, commit atomically, and push. This
+  follow-up may change only `.agents/skills/as-prose/` and root `learnings.md`;
+  do not carry over benchmark edits. Keep changes tied to the accepted feedback.
+- **Never merge the PR.** After `clean`, leave the original PR and branch
+  untouched: no further commits, edits, comments, closing, or merging. Keep
+  acceptance links and follow-up details in `learnings.md` instead.
 
 ## Constraints
 
