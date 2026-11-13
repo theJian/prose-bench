@@ -1,0 +1,104 @@
+{
+  "repository": "https://github.com/josharsh/100LinesOfCode",
+  "license": "GPL-3.0",
+  "transformations": [
+    "Removed source comments and Python docstrings; normalized surrounding blank lines.",
+    "Combined the TCP client and server Java source roots under src/; package declarations are unchanged.",
+    "Kept upstream explanatory READMEs out of the benchmark inputs."
+  ],
+  "projects": [
+    {
+      "id": "tcp-socket",
+      "revision": "33efeccf62ae0eac8ea874a3f0c53d299c4a7700",
+      "author": "Saif Kazi",
+      "files": [
+        {
+          "path": "src/com/saif/tcp/client/Main.java",
+          "upstream_path": "TCP-Socket/TCP/TCP-Client/src/com/saif/tcp/client/Main.java",
+          "upstream_sha256": "fdf0bce191df0ecf5f2af8f4019b8e21d6accd8cc2f7c1779cb8296371faddee"
+        },
+        {
+          "path": "src/com/saif/tcp/server/Main.java",
+          "upstream_path": "TCP-Socket/TCP/TCP-Server/src/com/saif/tcp/server/Main.java",
+          "upstream_sha256": "f4727799d7dc16d2077629d105efac26aa81a77de0d702de42c130b46193076b"
+        },
+        {
+          "path": "src/com/saif/tcp/server/ServerThread.java",
+          "upstream_path": "TCP-Socket/TCP/TCP-Server/src/com/saif/tcp/server/ServerThread.java",
+          "upstream_sha256": "668897bde0679a500793ea8cdeccd13871f4101a45f7768354a68c5c3e2f7d49"
+        }
+      ]
+    },
+    {
+      "id": "password-generator",
+      "revision": "0dd143596df7083872e2aad25f2b762550729c37",
+      "author": "Akash Kumar (source attribution: Akash Kummar)",
+      "files": [
+        {
+          "path": "main.py",
+          "upstream_path": "password_generator/main.py",
+          "upstream_sha256": "2e53b23f11db1320fa5e0661bce1ba7c1a536e76205582a156a7ee8e9624c7d6"
+        },
+        {
+          "path": "password_generator.py",
+          "upstream_path": "password_generator/password_generator.py",
+          "upstream_sha256": "f31de50c3e9a6a3e413c56594e58b001857e905188bf608d1426aabe731b5823"
+        }
+      ]
+    },
+    {
+      "id": "make-text-uppercase",
+      "revision": "10cb3e52b7f9fa6a92660ecf0843135f84bdcfb6",
+      "author": "Benjamin Manuel",
+      "files": [
+        {
+          "path": "server.js",
+          "upstream_path": "Make-Text-Uppercase/server.js",
+          "upstream_sha256": "4dac8f8700872ba32828f9118218d045e16841c7051241ad8d2fd1ebb75f620c"
+        },
+        {
+          "path": "package.json",
+          "upstream_path": "Make-Text-Uppercase/package.json",
+          "upstream_sha256": "4c64493c13385bb75ccee34348a182abb54c12221dead296069496a52c9a0a7d"
+        },
+        {
+          "path": "express/index.html",
+          "upstream_path": "Make-Text-Uppercase/express/index.html",
+          "upstream_sha256": "8dcb4f7a2671289d93d882f87e5ff46cc80daab54196508ceffebda398719770"
+        },
+        {
+          "path": "express/script.js",
+          "upstream_path": "Make-Text-Uppercase/express/script.js",
+          "upstream_sha256": "37b42b98e2c464c5ce0a3295f46e34f2bc9eb562e46527502c8bbd4d43b9cf9d"
+        },
+        {
+          "path": "express/style.css",
+          "upstream_path": "Make-Text-Uppercase/express/style.css",
+          "upstream_sha256": "d6b1a43211e3c03cd28f3e9dfbc4e0799ec91b51aca8628c2e3883cd6fec3b66"
+        }
+      ]
+    },
+    {
+      "id": "huffman-compressor",
+      "revision": "c88bd81ad593c35ceceeba64b85642c70b1f84e9",
+      "author": "Soham Haldar",
+      "files": [
+        {
+          "path": "huffman.cpp",
+          "upstream_path": "Huffman compressor/huffman.cpp",
+          "upstream_sha256": "5a6c4be05fd03e5bcaddc35f5118bb10474e14d212111db58f8199dd607053f3"
+        },
+        {
+          "path": "compressor.py",
+          "upstream_path": "Huffman compressor/compressor.py",
+          "upstream_sha256": "d82369f028d3e0df0bb70572e784d202300b44e0d5bb832d390a82a2e8a7a1c5"
+        },
+        {
+          "path": "decompressor.py",
+          "upstream_path": "Huffman compressor/decompressor.py",
+          "upstream_sha256": "303cb8be3f3dad5b26533ff75c0f71a846bbf01830d9e638827e4065397d84f5"
+        }
+      ]
+    }
+  ]
+}

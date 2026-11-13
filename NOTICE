@@ -1,0 +1,20 @@
+The four projects in projects/ are derived from josharsh/100LinesOfCode:
+https://github.com/josharsh/100LinesOfCode
+
+Upstream supplies these projects under the GNU General Public License,
+version 3. The complete license is included in LICENSE.
+
+Project attributions:
+- tcp-socket: Saif Kazi
+- password-generator: Akash Kumar; the original source credits "Akash Kummar"
+- make-text-uppercase: Benjamin Manuel
+- huffman-compressor: Soham Haldar
+
+Local modifications: source comments and Python docstrings were removed,
+surrounding blank lines were normalized, and the Java client and server
+source directories were combined under one src/ directory. Package names
+and executable statements were preserved. Upstream explanatory READMEs
+are not included in the benchmark inputs.
+
+Exact upstream revisions, original paths, and source hashes are recorded
+in SOURCES.json.
