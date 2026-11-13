@@ -25,10 +25,9 @@ iterations; setup and fixture maintenance do not start an experiment.
    fresh contexts without coaching expected comments or scores. If results
    reveal a skill weakness, revise the guidance and rerun; apply the final skill
    version across all four projects.
-4. **Verify.** Preserve behavior and public interfaces. For documentation edits,
-   check executable syntax or compiled output is unchanged, accounting for
-   Python docstrings. Explain and test structural changes separately. Recheck
-   accepted learnings' regression criteria and report the outcomes in the PR.
+4. **Verify.** Judge the change against the current goal, human feedback, and
+   accepted learnings from history. Report evidence and gaps; do not invent
+   additional acceptance criteria.
 5. **Commit and push.** Use conventional, atomic commits on the chosen branch.
    Commit skill changes and resulting project edits separately in the same PR;
    push as work progresses.
