@@ -31,10 +31,10 @@ iterations; setup and fixture maintenance do not start an experiment.
 5. **Commit and push.** Use conventional, atomic commits on the chosen branch.
    Commit skill changes and resulting project edits separately in the same PR;
    push as work progresses.
-6. **Request human review.** Open or update the PR with the problem, skill change, direct
-   `projects/` diffs, checks, limitations, and links to relevant feedback. Ask
-   for human feedback and an explicit `clean` comment when satisfied. Return
-   the PR URL and wait; report publishing blockers honestly.
+6. **Request human review.** Open a draft PR, or update the existing PR, with the
+   problem, skill change, direct `projects/` diffs, checks, limitations, and links
+   to relevant feedback. Ask for human feedback and an explicit `clean` comment
+   when satisfied. Return the PR URL and wait; report publishing blockers honestly.
 7. **Incorporate feedback.** Before `clean`, revise the skill, rerun it, and
    update the same PR. After `clean`, update skills and append learnings directly
    on `main` as described below. Start new experiments from the updated `main`.
