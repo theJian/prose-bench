@@ -1,12 +1,11 @@
 # prose-bench
 
 Small, working projects for evaluating `as-prose`. Each project has multiple
-runtime source units. The initial baseline has source comments and Python
-docstrings removed; license and attribution notices are retained separately.
+runtime source units.
 
 The skill lives in [.agents/skills/as-prose/](.agents/skills/as-prose/).
 See [AGENTS.md](AGENTS.md) for the improvement workflow: update the skill,
-apply it directly to all four projects under `projects/`, and open a PR for
+apply it directly to projects under `projects/`, and open a PR for
 human review. The PR shows the skill's in-place source changes as a normal diff.
 
 | Project | Languages | Runtime source units |
@@ -15,73 +14,6 @@ human review. The PR shows the skill's in-place source changes as a normal diff.
 | [Password generator](projects/password-generator/) | Python | 2 modules |
 | [Make text uppercase](projects/make-text-uppercase/) | JavaScript, HTML, CSS | 2 JavaScript files, plus HTML and CSS |
 | [Huffman compressor](projects/huffman-compressor/) | C++, Python | 3 cooperating programs |
-
-The initial stripped baseline contains 380 source lines, including blank lines
-and the HTML/CSS files. Dependency manifests, licenses, and this repo's metadata
-are excluded from that count. Original source paths and pinned revisions are in
-[SOURCES.json](SOURCES.json); author credits are in [NOTICE](NOTICE).
-
-## Run the projects
-
-Commands below start from the repository root. Build products and installed
-dependencies are ignored by Git.
-
-### TCP socket
-
-Requires a JDK. In one terminal:
-
-```sh
-cd projects/tcp-socket
-mkdir -p build
-javac -d build src/com/saif/tcp/client/Main.java src/com/saif/tcp/server/*.java
-java -cp build com.saif.tcp.server.Main
-```
-
-In another terminal:
-
-```sh
-cd projects/tcp-socket
-java -cp build com.saif.tcp.client.Main
-```
-
-The upstream programs use port 5000. Enter `exit` to close the client and stop
-the server with Ctrl+C.
-
-### Password generator
-
-Requires Python 3 with Tkinter and a desktop display.
-
-```sh
-cd projects/password-generator
-python3 main.py
-```
-
-### Make text uppercase
-
-Requires Node.js and npm.
-
-```sh
-cd projects/make-text-uppercase
-npm install
-npm start
-```
-
-Open <http://localhost:3000>. The upstream page loads Bootstrap styles from a CDN.
-
-### Huffman compressor
-
-Requires a C++17 compiler and Python 3.
-
-```sh
-cd projects/huffman-compressor
-c++ -std=c++17 huffman.cpp -o huffman
-./huffman
-python3 compressor.py
-python3 decompressor.py
-```
-
-Run the programs in this order and supply the input, codebook, and output
-filenames at their prompts.
 
 ## License
 
