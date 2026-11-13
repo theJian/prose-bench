@@ -1,8 +1,13 @@
 # prose-bench
 
 Small, working projects for evaluating `as-prose`. Each project has multiple
-runtime source units. Source comments and Python docstrings have been removed;
-license and attribution notices are retained separately.
+runtime source units. The initial baseline has source comments and Python
+docstrings removed; license and attribution notices are retained separately.
+
+The skill lives in [.agents/skills/as-prose/](.agents/skills/as-prose/).
+See [AGENTS.md](AGENTS.md) for the improvement workflow: update the skill,
+apply it directly to all four projects under `projects/`, and open a PR for
+human review. The PR shows the skill's in-place source changes as a normal diff.
 
 | Project | Languages | Runtime source units |
 | --- | --- | --- |
@@ -11,7 +16,7 @@ license and attribution notices are retained separately.
 | [Make text uppercase](projects/make-text-uppercase/) | JavaScript, HTML, CSS | 2 JavaScript files, plus HTML and CSS |
 | [Huffman compressor](projects/huffman-compressor/) | C++, Python | 3 cooperating programs |
 
-The stripped fixtures contain 380 source lines in total, including blank lines
+The initial stripped baseline contains 380 source lines, including blank lines
 and the HTML/CSS files. Dependency manifests, licenses, and this repo's metadata
 are excluded from that count. Original source paths and pinned revisions are in
 [SOURCES.json](SOURCES.json); author credits are in [NOTICE](NOTICE).
