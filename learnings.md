@@ -20,3 +20,10 @@ The iteration agent reads these lessons before changing the skill and checks
 their regression criteria before requesting review. Skill application and
 independent review receive the updated skill and fresh task briefs, not this
 tracking record.
+
+## Record policy
+
+This file is append-only meeting notes. Never edit, delete, reorder, or rewrite
+existing entries. Append new dated notes at the end. For a correction or
+superseding decision, reference the earlier note in a new entry and retain the
+original text.

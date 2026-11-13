@@ -37,18 +37,21 @@ iterations; setup and fixture maintenance do not start an experiment.
    for human feedback and an explicit `clean` comment when satisfied. Return
    the PR URL and wait; report publishing blockers honestly.
 7. **Incorporate feedback.** Before `clean`, revise the skill, rerun it, and
-   update the same PR. After `clean`, update skills and learnings directly on
-   `main` as described below. Start new experiments from the updated `main`.
+   update the same PR. After `clean`, update skills and append learnings directly
+   on `main` as described below. Start new experiments from the updated `main`.
 
 ## Acceptance and learning
 
 - A human's explicit `clean` comment accepts the reviewed revision and authorizes
-  the agent to update skills and root `learnings.md` directly on `main`.
+  the agent to update skills and append to root `learnings.md` directly on `main`.
   Bot comments, approvals, and agent scores do not substitute for it.
-- Record lessons from accepted human feedback in
+- Append lessons from accepted human feedback to
   [learnings.md](learnings.md), with evidence and a concrete regression check.
   This is the iteration agent's tracking record, outside the skill package.
   Keep unaccepted feedback in its PR.
+- **Learnings are append-only meeting notes.** Never edit, delete, reorder, or
+  rewrite existing entries. Append dated corrections or superseding decisions
+  that reference the earlier note; preserve the full history.
 - After `clean`, carry forward the accepted skill changes and incorporate the
   accepted feedback on `main`. Validate, commit atomically, and push. This
   follow-up may change only `.agents/skills/as-prose/` and root `learnings.md`;
