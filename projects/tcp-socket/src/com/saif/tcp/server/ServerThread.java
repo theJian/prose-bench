@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Own one accepted socket and echo complete lines to that client.
+ * The listener passes the socket to the constructor and calls the
+ * inherited {@link Thread#start()} to run the session on a worker thread.
+ */
 public class ServerThread extends Thread {
     private Socket socket;
 
@@ -13,6 +18,12 @@ public class ServerThread extends Thread {
         this.socket = socket;
     }
 
+    /**
+     * A case-insensitive {@code exit} line ends the session before any reply.
+     * An I/O exception also ends the session. Both paths close the socket.
+     * At end of stream, {@code readLine()} returns null and the loop keeps
+     * printing {@code null} to the socket's writer.
+     */
     @Override
     public void run() {
         try {

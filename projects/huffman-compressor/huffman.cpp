@@ -1,3 +1,15 @@
+/**
+ * Generate the codebook shared by compressor.py and decompressor.py. Run main
+ * and supply a source text path and a codebook path. The file stores one
+ * symbol, a separating space, and its bit string on each line. A space symbol
+ * therefore starts its record with two spaces.
+ *
+ * generateHuffmanCodes keeps letters and whitespace within input lines,
+ * uppercases the letters, and counts each resulting symbol. It combines the
+ * least frequent nodes until each symbol has a path through one tree. The
+ * line separators consumed by getline are omitted. Supply input with at
+ * least two distinct symbols after this normalization for a usable codebook.
+ */
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
@@ -29,6 +41,8 @@ void printCodes(Node *root, string str, unordered_map<char, string> &huffmanCode
         huffmanCodes[root->symbol] = str;
     }
 }
+// With zero symbols the queue has no root. A lone symbol gets an empty code,
+// so its occurrences cannot be recovered by the decoder.
 unordered_map<char, string> generateHuffmanCodes(istream &input) {
     unordered_map<char, unsigned> freq;
     string line;

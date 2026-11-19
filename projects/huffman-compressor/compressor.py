@@ -1,8 +1,24 @@
+"""
+Encode text as a stream of the characters 0 and 1 using a codebook from
+huffman.cpp. Normalization and codebook filtering discard information from
+the original text. Run this script and enter the source text, existing codebook,
+and destination paths. The prompts run at module load and pass those paths
+to compress. Give decompressor.py the encoded file and the same codebook.
+"""
+
 import math
 def compress(ifile, codes, ofile):
+    """
+    Read text from ifile and the symbol-to-code table from codes. Strip outer
+    whitespace, keep letters and whitespace, and uppercase those characters
+    before looking them up in the codebook. Skip symbols missing from the
+    table. Write the bit string to ofile as text and print the stripped
+    input's entropy minus the bit string's entropy.
+    """
     symbol_codes = {}
     with open(codes, 'r') as f:
         for line in f:
+            # Split at the last space so a space symbol survives parsing.
             last_space_index = line.rfind(' ')
             if last_space_index != -1:
                 symbol = line[:last_space_index]
@@ -21,6 +37,7 @@ def compress(ifile, codes, ofile):
         f.write(compressed)
     entropy(itext,compressed)
 def entropy(a,b):
+    """Print the Shannon entropy of a minus that of b, in bits per character."""
     D = {}
     E = {}
     for i in a:

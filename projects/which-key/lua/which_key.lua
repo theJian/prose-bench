@@ -1,3 +1,33 @@
+-- Show continuations for Neovim mappings when the user pauses on a prefix.
+--
+-- Each buffer and enabled mode has a prefix tree built from global and
+-- buffer-local mappings. Buffer-local definitions take precedence. The module
+-- uses attach to add buffer-local triggers at eligible first keys with longer
+-- mappings.
+-- Neovim's own mapping timeout decides when a trigger runs.
+--
+-- A trigger calls show, which owns the single active interaction and its
+-- floating panel. It reads continuation keys and opens the panel if no key is
+-- queued. When the prefix resolves or leaves the tree, show removes the
+-- trigger and queues the prefix and any typed continuation keys, with the
+-- count and register, for Neovim to interpret. SafeState restores triggers
+-- after replay. A complete mapping takes precedence over hints.
+--
+--   setup(opts)  Start or replace the configuration.
+--   refresh()    Reindex the current buffer after mapping changes.
+--   show(prefix) Start an interactive hint and replay the resulting key sequence.
+--   disable()    Cancel input and remove the module's hooks, triggers, and UI.
+--
+-- For example, set the Space leader before defining mappings.
+--
+--   vim.g.mapleader = ' '
+--   vim.keymap.set('n', '<leader>ws', '<Cmd>split<CR>', { desc = 'Split window' })
+--   local which_key = require('which_key')
+--   which_key.setup { groups = { ['<leader>w'] = 'Windows' } }
+--
+-- Press Space and pause, then press w to see s. Groups label prefixes of
+-- existing mappings. Define the actual actions with vim.keymap.set.
+
 local M = {}
 local api, fn = vim.api, vim.fn
 local defaults = {
@@ -70,6 +100,7 @@ local function detach(buf, mapping_mode, only_key)
 		if index then
 			for _, map in ipairs(api.nvim_buf_get_keymap(buf, m)) do
 				local key = raw(map.lhs)
+				-- A caller may have replaced a trigger since the last refresh.
 				if (not only_key or key == only_key) and index.owned[key] and map.callback == index.owned[key] then
 					vim.keymap.del(m, map.lhs, { buffer = buf })
 					index.owned[key] = nil
@@ -165,6 +196,7 @@ local function render(active, node)
 	local pages = math.ceil(#items / size)
 	active.page = math.min(active.page or 1, pages)
 	active.pages = pages
+	-- A real continuation keeps its key even when the list needs pagination.
 	active.down = not node.children[raw(state.opts.page_down)] and raw(state.opts.page_down) or nil
 	active.up = not node.children[raw(state.opts.page_up)] and raw(state.opts.page_up) or nil
 	local title = fn.keytrans(active.prefix)
@@ -228,6 +260,7 @@ end
 
 local function attach(buf, mapping_mode, index)
 	for key, child in pairs(index.root.children) do
+		-- Leave native count, register, cancel, and command entry keys alone.
 		local unsafe = key:match '^[0-9"\27]$' or key == raw '<C-c>' or (mapping_mode == 'n' and key:match '^[dcyrq@]$')
 		if not child.map and next(child.children) and not unsafe then
 			local callback = function()
@@ -254,6 +287,10 @@ local function attach(buf, mapping_mode, index)
 	end
 end
 
+-- Rebuild the current buffer only. Events such as BufEnter, FileType and
+-- LspAttach request a refresh. Call refresh after changing mappings directly
+-- to update the current buffer's triggers. A hint or replay defers rebuilding
+-- until the interaction finishes so its tree and triggers stay valid.
 function M.refresh()
 	if not state.enabled then
 		return
@@ -301,6 +338,12 @@ replay = function(active)
 	api.nvim_feedkeys((active.temporary and raw '<C-o>' or '') .. context .. active.prefix, 'mi', false)
 end
 
+-- After setup, pass a prefix in Neovim key notation such as '<leader>w'.
+-- Returns immediately when disabled, outside a configured mode, or while
+-- another hint is active. An enabled call can wait for keyboard input.
+-- Escape, Ctrl-C, leaving the buffer, window or tab, and switching out of the
+-- active mode cancel the hint.
+-- On resolution or a missing match, replay starts after the window closes.
 function M.show(prefix)
 	local mapping_mode = mode()
 	if not state.enabled or state.active or not vim.tbl_contains(state.opts.modes, mapping_mode) then
@@ -367,6 +410,8 @@ function M.show(prefix)
 	end
 end
 
+-- Tear down every cached buffer's owned triggers and wake any pending read.
+-- Mappings that a caller installed in place of a trigger are preserved.
 function M.disable()
 	cancel()
 	for buf in pairs(state.caches) do
@@ -381,6 +426,12 @@ function M.disable()
 	state = { caches = {}, generation = state.generation + 1 }
 end
 
+-- Options override the defaults above. modes accepts 'n' and 'x'. groups maps
+-- prefix strings in Neovim key notation to display labels. max_height is at
+-- least 2 rows including the title. min_column_width is at least 8 screen
+-- cells. page_down and page_up name keys that are available for pagination
+-- when no continuation claims them. Setup tears down the previous installation
+-- before validating options, so a validation error leaves it disabled.
 function M.setup(opts)
 	M.disable()
 	state.opts = vim.tbl_deep_extend('force', defaults, opts or {})

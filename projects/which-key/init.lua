@@ -1,3 +1,8 @@
+-- Run a standalone which-key demo with nvim -u init.lua. This config adds
+-- the bundled module to runtimepath, defines normal-mode example mappings
+-- under the Space leader, then labels their prefixes through which_key.setup.
+-- Pause after Space then w to see the window mappings.
+
 vim.o.loadplugins = false
 vim.opt.runtimepath:prepend(vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'))
 vim.g.mapleader = ' '
