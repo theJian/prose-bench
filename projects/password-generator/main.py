@@ -1,3 +1,10 @@
+"""
+Run this script to open the Tkinter password generator. Each checkbox change
+calls get_password to read all four character-set selections and pass them to
+PasswordGenerator.generate_random_password. The label displays the returned
+password or error message.
+"""
+
 import tkinter as tk
 from password_generator import PasswordGenerator
 
